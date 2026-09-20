@@ -1,0 +1,23 @@
+{
+  "name": "sharkai-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SharkAI API: Express + Ollama",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jszip": "^3.10.1",
+    "multer": "^2.0.0",
+    "pdfjs-dist": "^4.10.38",
+    "pg": "^8.23.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

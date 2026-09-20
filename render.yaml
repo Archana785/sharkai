@@ -1,0 +1,30 @@
+# One-click setup on Render (https://render.com): New > Blueprint > pick your GitHub repo.
+services:
+  - type: web
+    name: sharkai
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: AI_PROVIDER
+        value: groq,gemini
+      - key: GROQ_API_KEY
+        sync: false          # you type this in the Render dashboard, it is never stored in the repo
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false          # Supabase > Connect > Session pooler (NOT the "Direct connection": Render cannot reach it)
+      - key: AUTH_SECRET
+        generateValue: true  # Render creates a long random secret once and keeps it
+      - key: DEMO_NAME
+        value: Demo Presenter
+      - key: DEMO_EMAIL
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: MAX_EVALS_PER_DAY
+        value: 40

@@ -1,0 +1,7 @@
+node_modules
+dist
+.env
+*.log
+server/data
+_backup_before_update
+apply-update*.mjs
