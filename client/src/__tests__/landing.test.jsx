@@ -14,6 +14,7 @@ beforeEach(() => {
 });
 
 const HEADLINE = 'See how strong your startup idea really is.';
+const LEDE = 'SharkAI helps you evaluate your startup idea, understand where it stands, and get clear next steps to move forward.';
 const h2s = () => screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent);
 // All visible text in <main>, with a space between elements (textContent would glue neighbours together).
 const mainText = () => {
@@ -24,18 +25,18 @@ const mainText = () => {
 };
 
 describe('Landing page (/) hero', () => {
-  it('shows the new headline and sub heading to a visitor who is not signed in', () => {
+  it('shows the headline and the short supporting sentence to a visitor who is not signed in', () => {
     setup('/', { user: null });
     expect(where()).toBe('/');
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(HEADLINE);
-    expect(screen.getByText('Share your idea and get a clear assessment of its potential, risks, and next steps.')).toBeTruthy();
+    expect(document.querySelectorAll('.lp-hero p').length).toBe(1);
+    expect(document.querySelector('.lp-hero p').textContent).toBe(LEDE);
     expect(document.title).toBe('SharkAI: Know if your startup idea is worth building');
   });
 
-  it('no longer has the small "AI startup mentor" label above the headline', () => {
+  it('has no label above the headline', () => {
     setup('/', { user: null });
     expect(document.querySelector('.lp-eyebrow')).toBeNull();
-    expect(screen.queryByText(/startup mentor/i)).toBeNull();
     expect(document.querySelector('.lp-hero').firstElementChild.tagName).toBe('H1');
   });
 
@@ -72,89 +73,75 @@ describe('Landing page (/) hero', () => {
   });
 });
 
-describe('Landing page (/) sections', () => {
-  it('keeps the same sections, ending with the call to action', () => {
+describe('Landing page (/) structure: hero, how it works, what you get, final call to action', () => {
+  it('has only those four parts, in that order', () => {
     setup('/', { user: null });
-    expect(h2s()).toEqual(['Turn an idea into a plan.', 'How It Works', 'What You Get', 'Who Is It For', 'Frequently Asked Questions', 'Have an idea? Put it to the test.']);
+    expect(h2s()).toEqual(['How It Works', 'What You Get', 'Ready to test your idea?']);
+    expect([...document.querySelector('.lp').children].map((c) => c.className.split(' ')[0])).toEqual(['lp-hero', 'lp-section', 'lp-section', 'lp-final']);
+    expect([...document.querySelectorAll('.lp > section')].map((s) => s.id)).toEqual(['how-it-works', 'get', '']);
   });
 
-  it('introduces SharkAI with a headline, a main line and a smaller supporting line, as separate paragraphs', () => {
-    setup('/', { user: null });
-    const what = document.getElementById('what');
-    expect(within(what).getByRole('heading', { level: 2 }).textContent).toBe('Turn an idea into a plan.');
-    const [main, support, ...rest] = what.querySelectorAll('.lp-prose > p');
-    expect(rest.length).toBe(0);
-    expect(main.textContent).toBe('SharkAI evaluates your startup idea before you build it.');
-    expect(support.textContent).toBe('It analyzes the problem, market, competition, and feasibility to show you where your idea stands and what to work on first.');
-    expect(support.className).toBe('lp-support');
-  });
-
-  it('leaves the top hero text as it was', () => {
-    setup('/', { user: null });
-    const hero = document.querySelector('.lp-hero');
-    expect(within(hero).getByRole('heading', { level: 1 }).textContent).toBe(HEADLINE);
-    expect(within(hero).getByText('Share your idea and get a clear assessment of its potential, risks, and next steps.')).toBeTruthy();
-  });
-
-  it('shows the three numbered steps', () => {
+  it('shows the three steps with short text', () => {
     setup('/', { user: null });
     const steps = [...document.querySelectorAll('#how-it-works li')];
     expect(steps.map((li) => li.querySelector('.lp-num').textContent)).toEqual(['01', '02', '03']);
-    expect(steps.map((li) => li.querySelector('h3').textContent)).toEqual(['Share Your Idea', 'Get Your Evaluation', 'Know What To Do Next']);
-    expect(steps[0].textContent).toMatch(/upload a document or speak your idea/);
-    expect(steps[2].textContent).toMatch(/Review the results, follow the founder journey, and prepare your pitch\./);
+    expect(steps.map((li) => li.querySelector('h3').textContent)).toEqual(['Share your idea', 'Get your evaluation', 'Know what to do next']);
+    expect(steps.map((li) => li.querySelector('p').textContent)).toEqual([
+      'Tell SharkAI about your startup idea.',
+      'SharkAI analyzes your idea and gives you useful feedback.',
+      'Get clear direction on what to improve or explore next.'
+    ]);
   });
 
-  it('lists what you get: six areas, seven stages and a pitch', () => {
+  it('shows only three things you get, each with one short line', () => {
     setup('/', { user: null });
-    const get = document.getElementById('get');
-    expect(within(get).getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['6-Area Evaluation', '7-Stage Founder Journey', 'Ready-to-Present Pitch']);
-    expect([...within(get).getByRole('list', { name: 'The six areas' }).children].map((li) => li.textContent)).toEqual(
-      ['Problem', 'Market', 'Competition', 'Difference', 'Growth', 'Revenue']
-    );
-    expect([...within(get).getByRole('list', { name: 'The seven stages' }).children].map((li) => li.textContent.replace(/^\d/, ''))).toEqual(
-      ['Review', 'Validate', 'Build an MVP', 'Test', 'Refine & Price', 'Launch', 'Create your pitch']
-    );
+    const cards = [...document.querySelectorAll('#get .lp-card')];
+    expect(cards.map((c) => c.querySelector('h3').textContent)).toEqual(['Idea Evaluation', 'Actionable Insights', 'Next Steps']);
+    expect(cards.map((c) => c.querySelector('p').textContent)).toEqual([
+      'Understand the strengths and gaps in your startup idea.',
+      'See the key areas that need attention.',
+      'Get practical direction for moving your idea forward.'
+    ]);
+    cards.forEach((c) => { expect(c.querySelectorAll('p').length).toBe(1); expect(c.querySelector('ul, ol')).toBeNull(); });
   });
 
-  it('says who it is for, with no extra intro', () => {
-    setup('/', { user: null });
-    const who = document.getElementById('who');
-    expect(within(who).getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['Students', 'First-Time Founders']);
-    expect(who.querySelectorAll('p').length).toBe(2);
-  });
-
-  it('answers the three questions briefly, and says plainly that the results are not investment advice', () => {
-    setup('/', { user: null });
-    const faq = document.getElementById('faq');
-    expect(within(faq).getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['Is it free?', 'What happens to my idea?', 'Is the feedback guaranteed?']);
-    expect(within(faq).getByText(/not investment advice/)).toBeTruthy();
-    faq.querySelectorAll('.lp-qa p').forEach((p) => expect(p.textContent.length).toBeLessThan(200));
-  });
-
-  it('ends with the new call to action and the site footer', () => {
+  it('ends with a simple call to action and the site footer', () => {
     setup('/', { user: null });
     const final = document.querySelector('.lp-final');
-    expect(within(final).getByRole('heading', { name: 'Have an idea? Put it to the test.' })).toBeTruthy();
+    expect(within(final).getByRole('heading', { name: 'Ready to test your idea?' })).toBeTruthy();
+    expect(final.querySelectorAll('p').length).toBe(0);
     expect(within(final).getByRole('link', { name: 'Evaluate My Idea' }).getAttribute('href')).toBe('/evaluate');
     expect(screen.getByRole('contentinfo')).toBeTruthy();
     expect(screen.getByRole('navigation', { name: 'Quick links' })).toBeTruthy();
   });
 });
 
+describe('Landing page (/) no longer reveals the detailed product', () => {
+  it('has none of the removed sections', () => {
+    setup('/', { user: null });
+    ['what', 'who', 'faq', 'pitch', 'journey'].forEach((id) => expect(document.getElementById(id)).toBeNull());
+    expect(screen.queryByRole('heading', { name: /who is it for|frequently asked|founder journey|pitch|turn an idea into a plan/i })).toBeNull();
+    expect(document.querySelectorAll('.lp-chips, .lp-stages, .lp-faq, .lp-who, .lp-prose').length).toBe(0);
+  });
+
+  it('does not describe the report, the scoring, the journey stages or the pitch', () => {
+    setup('/', { user: null });
+    expect(mainText()).not.toMatch(/founder|journey|stage|pitch|report|score|scoring|six|seven|6-|7-|investment|feasibility|competition|revenue|students/i);
+  });
+});
+
 describe('Landing page (/) writing', () => {
-  it('does not repeat the phrases that were removed', () => {
+  it('does not use the phrases that were removed earlier', () => {
     setup('/', { user: null });
     expect(mainText()).not.toMatch(/startup mentor/i);
     expect(mainText()).not.toMatch(/honest/i);
     expect(mainText()).not.toMatch(/plain English/i);
   });
 
-  it('uses no em dashes, and hyphens only in the headings that call for them', () => {
+  it('uses no em dashes and no hyphenated words', () => {
     setup('/', { user: null });
     expect(mainText()).not.toMatch(/[—–]/); // em dash, en dash
-    const hyphenated = mainText().match(/\w+(?:-\w+)+/g) || [];
-    expect([...new Set(hyphenated)].sort()).toEqual(['6-Area', '7-Stage', 'First-Time', 'Ready-to-Present']);
+    expect(mainText().match(/\w+(?:-\w+)+/g) || []).toEqual([]);
   });
 
   it('marks sections and headings so screen readers can move around the page', () => {
@@ -171,6 +158,12 @@ describe('Flow: Landing → Sign In / Sign Up → Evaluate', () => {
     expect(where()).toBe('/login');
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Welcome back');
     expect(screen.getByRole('link', { name: 'Create one.' }).getAttribute('href')).toBe('/signup');
+  });
+
+  it('the navbar Sign In link still opens the sign in page', async () => {
+    setup('/', { user: null });
+    await userEvent.click(screen.getByRole('link', { name: 'Sign In' }));
+    expect(where()).toBe('/login');
   });
 
   it('after signing in they land directly on the Evaluate page', async () => {
@@ -212,13 +205,13 @@ describe('Scroll reveal', () => {
     const scrollTo = manualObserver();
     setup('/', { user: null });
     const sections = [...document.querySelectorAll('.lp-section.reveal, .lp-final.reveal')];
-    expect(sections.length).toBe(6);
+    expect(sections.length).toBe(3);
     sections.forEach((s) => expect(s.classList.contains('in')).toBe(false));
     scrollTo(sections[1]);
     expect(sections[1].classList.contains('in')).toBe(true);
     expect(sections.filter((s) => s.classList.contains('in')).length).toBe(1);
-    scrollTo(sections[5]);
-    expect(sections[5].classList.contains('in')).toBe(true);
+    scrollTo(sections[2]);
+    expect(sections[2].classList.contains('in')).toBe(true);
   });
 
   it('does not hold back the hero: it is not part of the reveal and keeps its own entrance', () => {
