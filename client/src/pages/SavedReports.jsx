@@ -56,7 +56,7 @@ export default function SavedReports() {
         <div className="empty-card">
           <h2>No saved reports yet</h2>
           <p>Evaluate an idea and its report will appear here.</p>
-          <Link className="btn btn-primary" to="/">Evaluate an idea</Link>
+          <Link className="btn btn-primary" to="/evaluate">Evaluate an idea</Link>
         </div>
       )}
       {reports && reports.length > 0 && (

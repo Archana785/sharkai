@@ -41,7 +41,7 @@ export default function Dashboard() {
         <p>Pick up where you left off, or evaluate something new.</p>
       </header>
       <div className="acct-actions">
-        <Link className="btn btn-primary" to="/">Evaluate a new idea</Link>
+        <Link className="btn btn-primary" to="/evaluate">Evaluate a new idea</Link>
         <Link className="btn btn-ghost" style={{ height: 48 }} to="/saved">All saved reports</Link>
       </div>
       <section aria-labelledby="recent-title">

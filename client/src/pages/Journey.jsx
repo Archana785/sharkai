@@ -55,7 +55,7 @@ const PITCH_TEXT = 'SharkAI turns your validated idea, your results and your bus
 /** A horizontal journey with seven stages. Hover (or focus) a stage to read what it means. */
 export default function Journey() {
   const { result } = useEval();
-  if (!result) return <Navigate to="/" replace />;
+  if (!result) return <Navigate to="/evaluate" replace />;
 
   const stages = STAGES.map((s) => {
     if (s.now) return { ...s, body: reviewText(result) };

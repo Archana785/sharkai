@@ -90,9 +90,9 @@ const COLORS = ['43,181,166', '43,181,166', '43,181,166', '56,189,248', '212,160
 export default function Background() {
   const canvasRef = useRef(null);
   const paths = useMemo(contourPaths, []);
-  // The underwater touches (light, bubbles, tiny sharks) appear on the Evaluate page and the Journey page only.
+  // The underwater touches (light, bubbles, tiny sharks) appear on the landing page, the Evaluate page and the Journey page only.
   const { pathname } = useLocation();
-  const showSea = pathname === '/' || pathname === '/journey';
+  const showSea = pathname === '/' || pathname === '/evaluate' || pathname === '/journey';
 
   useEffect(() => {
     const canvas = canvasRef.current;

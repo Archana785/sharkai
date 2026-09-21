@@ -7,6 +7,7 @@ import { EvalProvider } from './context/EvalContext.jsx';
 import './styles/global.css';
 import './styles/refine.css';
 import './styles/shell.css';
+import './styles/landing.css';
 
 // Each account gets its own draft and report state; it resets when the account changes.
 function Root() {

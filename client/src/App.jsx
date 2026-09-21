@@ -4,6 +4,7 @@ import Background from './components/Background.jsx';
 import Nav from './components/Nav.jsx';
 import Footer from './components/Footer.jsx';
 import { useAuth } from './context/AuthContext.jsx';
+import Landing from './pages/Landing.jsx';
 import Home from './pages/Home.jsx';
 import Report from './pages/Report.jsx';
 import Journey from './pages/Journey.jsx';
@@ -17,7 +18,8 @@ import SavedReports from './pages/SavedReports.jsx';
 import Settings from './pages/Settings.jsx';
 
 const TITLES = {
-  '/': 'SharkAI — Know if your startup idea is worth building',
+  '/': 'SharkAI: Know if your startup idea is worth building',
+  '/evaluate': 'Evaluate your idea — SharkAI',
   '/report': 'Your report — SharkAI',
   '/journey': 'Founder journey — SharkAI',
   '/pitch': 'Your pitch — SharkAI',
@@ -41,18 +43,18 @@ function PageChrome() {
 
 const Splash = () => <div className="splash"><span className="spinner" aria-label="Loading" /></div>;
 
-/** Everything except the sign-in pages needs an account. */
+/** Everything except the landing page and the sign-in pages needs an account. */
 function RequireAuth({ children }) {
   const { user, loading } = useAuth();
   if (loading) return <Splash />;
   return user ? children : <Navigate to="/login" replace />;
 }
 
-/** Sign-in pages are only for signed-out visitors; signed-in users go to the homepage. */
+/** Sign-in pages are only for signed-out visitors; signed-in users go to the Evaluate page. */
 function GuestOnly({ children }) {
   const { user, loading } = useAuth();
   if (loading) return <Splash />;
-  return user ? <Navigate to="/" replace /> : children;
+  return user ? <Navigate to="/evaluate" replace /> : children;
 }
 
 const protect = (el) => <RequireAuth>{el}</RequireAuth>;
@@ -71,7 +73,8 @@ export default function App() {
           <Route path="/signup" element={guest(<Signup />)} />
           <Route path="/forgot-password" element={guest(<ForgotPassword />)} />
           <Route path="/reset-password" element={guest(<ResetPassword />)} />
-          <Route path="/" element={protect(<Home />)} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/evaluate" element={protect(<Home />)} />
           <Route path="/report" element={protect(<Report />)} />
           <Route path="/journey" element={protect(<Journey />)} />
           <Route path="/pitch" element={protect(<Pitch />)} />

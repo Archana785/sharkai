@@ -12,6 +12,14 @@
 .nav-cta { height: 40px; min-width: 0; padding: 0 18px; font-size: 14px; box-shadow: 0 8px 22px rgba(43, 181, 166, 0.22); }
 .nav-signin { height: 40px; padding: 0 18px; }
 @media (max-width: 800px) { .nav-cta { display: none; } }
+/* Phones: brand and account button on the first row, the page links on a second row (one row is wider than the screen). */
+@media (max-width: 480px) {
+  .nav { height: auto; grid-template-columns: 1fr auto; grid-template-areas: "brand tools" "links links"; row-gap: 10px; padding-top: 12px; padding-bottom: 6px; }
+  .nav .brand { grid-area: brand; }
+  .nav .brand-name { display: inline; }
+  .nav-tools { grid-area: tools; }
+  .nav-links { grid-area: links; justify-self: stretch; justify-content: space-between; }
+}
 
 .menu-wrap { position: relative; }
 .avatar-btn { width: 40px; height: 40px; padding: 0; border-radius: 50%; border: 1px solid var(--teal-ln); background: var(--teal-bg); color: var(--teal); font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: background .2s ease, transform .2s ease; }

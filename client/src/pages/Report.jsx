@@ -31,7 +31,7 @@ function download(name, text) {
 export default function Report() {
   const { result, analyzedIdea } = useEval();
   const [ctaRef, ctaSeen] = useInView();
-  if (!result) return <Navigate to="/" replace />;
+  if (!result) return <Navigate to="/evaluate" replace />;
 
   const lowest = ORDER.slice().sort((a, b) => result.evaluation[a].score - result.evaluation[b].score).slice(0, 2)
     .map((k) => result.evaluation[k].businessTerm);
@@ -44,7 +44,7 @@ export default function Report() {
           <p>{firstSentence(analyzedIdea)}</p>
         </div>
         <div className="row">
-          <Link className="btn btn-ghost" to="/" style={{ height: 46 }}><Icon name="refresh" size={16} /><span>Evaluate another idea</span></Link>
+          <Link className="btn btn-ghost" to="/evaluate" style={{ height: 46 }}><Icon name="refresh" size={16} /><span>Evaluate another idea</span></Link>
           <button type="button" className="btn btn-ghost" style={{ height: 46 }} onClick={() => download('sharkai-report.txt', reportText(result, analyzedIdea))}>
             <Icon name="download" size={16} /><span>Export report</span>
           </button>

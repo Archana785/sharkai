@@ -7,7 +7,7 @@ const SOCIAL = [
   { label: 'Email', href: 'mailto:hello@example.com' }
 ];
 const QUICK = [
-  { to: '/', label: 'Evaluate' },
+  { to: '/evaluate', label: 'Evaluate' },
   { to: '/report', label: 'Report' },
   { to: '/journey', label: 'Journey' },
   { to: '/pitch', label: 'Pitch' }

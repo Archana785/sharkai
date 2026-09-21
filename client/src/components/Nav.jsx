@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import AccountMenu from './AccountMenu.jsx';
 
 const LINKS = [
-  { to: '/', label: 'Evaluate', end: true },
+  { to: '/evaluate', label: 'Evaluate' },
   { to: '/report', label: 'Report' },
   { to: '/journey', label: 'Journey' },
   { to: '/pitch', label: 'Pitch' }
@@ -13,9 +13,9 @@ export default function Nav() {
   const { user } = useAuth();
   const { pathname } = useLocation();
 
-  // On the homepage the button just brings you to the idea box.
+  // On the Evaluate page the button just brings you to the idea box.
   const focusIdea = (e) => {
-    if (pathname !== '/') return;
+    if (pathname !== '/evaluate') return;
     e.preventDefault();
     const box = document.getElementById('idea');
     box?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -31,10 +31,10 @@ export default function Nav() {
         <span className="brand-name">SharkAI</span>
       </Link>
       <nav className="nav-links" aria-label="Main">
-        {LINKS.map((l) => <NavLink key={l.to} to={l.to} end={l.end}>{l.label}</NavLink>)}
+        {LINKS.map((l) => <NavLink key={l.to} to={l.to}>{l.label}</NavLink>)}
       </nav>
       <div className="nav-tools">
-        <Link className="btn btn-primary nav-cta" to="/" onClick={focusIdea}>Evaluate Idea</Link>
+        <Link className="btn btn-primary nav-cta" to="/evaluate" onClick={focusIdea}>Evaluate Idea</Link>
         {user ? <AccountMenu /> : <Link className="btn btn-ghost nav-signin" to="/login">Sign In</Link>}
       </div>
     </header>

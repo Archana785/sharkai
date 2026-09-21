@@ -52,7 +52,7 @@ export default function Pitch() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
-  if (!result) return <Navigate to="/" replace />;
+  if (!result) return <Navigate to="/evaluate" replace />;
 
   const words = countWords(pitch);
   const showText = pitch && !loading;
